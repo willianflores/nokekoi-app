@@ -1,5 +1,6 @@
 ## Import libraries
 import requests
+
 #import json
 from datetime import datetime, timedelta, date
 import pytz
@@ -89,10 +90,10 @@ def txt_to_parquet(directory_path, parquet_file_path):
     # Lista todos os arquivos .txt no diretório
     txt_files = glob.glob(os.path.join(directory_path, '*.txt'))
 
-    # Inicializa um DataFrame vazio para armazenar todos os dados
+    # Initialize an empty DataFrame to store all data
     df_total = pd.DataFrame()
 
-    # Carrega cada arquivo .txt e concatena ao DataFrame total
+    # Loads each .txt file and concatenates to the total DataFrame
     for file in txt_files:
         df = pd.read_csv(file, sep=',', encoding='utf-8')  # Ajuste o separador se necessário
         df_total = pd.concat([df_total, df], ignore_index=True)
@@ -106,11 +107,14 @@ def txt_to_parquet(directory_path, parquet_file_path):
     df_total = df_total.filter(["latitude", "longitude", "brightness", "acq_date"])
     df_total = df_total.loc[df_total["acq_date"]>= pd.to_datetime(date.today() - timedelta(days=365))]
     
-    # Exportar o DataFrame total para um arquivo .parquet
+    # Clip to TI and TI Buffer
+    
+    # Export to .parquet
     df_total.to_parquet(parquet_file_path, index=False)
 
 # Apply the function
-directory_path = "/home/willianflores/localhost/nokekoi_app/datasets/suomi-npp-viirs-c2/South_America/"
-parquet_file_path = "/home/willianflores/localhost/nokekoi_app/datasets/suomi-npp-viirs-c2/parquet/fire_data.parquet"
+directory_path = "/home/willianflores/localhost/nokekoiApp/datasets/suomi-npp-viirs-c2/South_America/"
+parquet_file_path = "/home/willianflores/localhost/nokekoiApp/datasets/suomi-npp-viirs-c2/parquet/fire_data.parquet"
 
 txt_to_parquet(directory_path, parquet_file_path)
+

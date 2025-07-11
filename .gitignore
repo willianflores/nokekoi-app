@@ -1,7 +1,8 @@
 ## Files
-datasets/radd/00N_080W.tif
-datasets/suomi-npp-viirs-c2/South_America/SUOMI_VIIRS_C2_South_America_VNP14IMGTDL_NRT_2023306.txt
+.env
+.DS_Store
 
 ## Folders
-datasets/suomi-npp-viirs-c2/csv
-datasets/txt
+node_modules/
+dist/
+logs/

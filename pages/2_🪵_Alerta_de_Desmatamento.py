@@ -28,7 +28,12 @@ st.set_page_config(
   layout = "wide",  
 )
 
-st.markdown(" <style> div[class^='block-container'] { padding-top: 8rem; } </style> ", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+        header {visibility: hidden;}
+        div[class^='block-container'] { padding-top: 8rem; }
+    </style>
+""", unsafe_allow_html=True)
 
 # @st.cache_data
 # def get_base64_of_bin_file(png_file):
@@ -96,7 +101,7 @@ with st.sidebar:
   #st.image(logo, width=300)
   st.sidebar.header("Alertas de desmatameto")
     
-  time = st.selectbox(
+  time = st.radio(
     "Selecione o período de análise:",
     (
       "15 dias",
@@ -108,56 +113,59 @@ with st.sidebar:
     )
   )
 
-## Dataset
-if time == "15 dias":
-  time_filter = 15
-elif time == "1 mês":
-  time_filter = 30  
-elif time == "2 meses":
-  time_filter = 60
-elif time == "3 meses":
-  time_filter = 90
-elif time == "6 meses":
-  time_filter = 180
-elif time == "1 ano":
-  time_filter = 365
 
-start_date = date.today() - timedelta(days = time_filter)
 
-#logo = Image.open("./img/logo_300.png")
-
-@st.cache_data
-def getShpData(shp_path):
-  shp = gpd.read_file(shp_path)
+@st.cache_data(ttl=600, hash_funcs={gpd.GeoDataFrame: lambda _: None})
+def getShpData(parquet_path):
   
-  return shp
-
-ti = getShpData("./datasets/shp/TI_Campinas_Katukina.shp")
-ti_buffer = getShpData("./datasets/shp/TI_Campinas_Katukina_Buffer10km.shp")
+  return gpd.read_parquet(parquet_path)
+  
+ti = getShpData("./datasets/shp/TI_Campinas_Katukina.parquet")
+ti_buffer = getShpData("./datasets/shp/TI_Campinas_Katukina_Buffer10km.parquet")
 
 # df_fire.memory_usage(deep=True)
 # df_fire.info()
 # df_fire["confidence"].value_counts()
 
-@st.cache_data
-def getGeoParquetData(parquet_path):
-  geoparquet = gpd.read_parquet(parquet_path)
+def getRaddData(data_type, time):
+  """
+  Load fire data based on type and time range.
+
+  Parameters:
+  data_type (str): The prefix of the dataset ('ti' or 'ti_buffer').
+  time (str): The time range ('15 dias', '1 mês', '2 meses', etc.).
+
+  Returns:
+  GeoDataFrame: The loaded GeoParquet data as a GeoDataFrame.
+  """
+  # Define the mapping of time ranges to file suffixes
+  time_map = {
+    "15 dias": "15d",
+    "1 mês": "30d",
+    "2 meses": "60d",
+    "3 meses": "90d",
+    "6 meses": "180d",
+    "1 ano": "365d",
+  }
   
-  return geoparquet
+  # Validate input
+  if time not in time_map:
+    raise ValueError(f"Invalid time range: {time}. Valid options are: {', '.join(time_map.keys())}")
+  if data_type not in ["ti", "ti_buffer"]:
+    raise ValueError(f"Invalid data type: {data_type}. Valid options are: 'ti', 'ti_buffer'")
+  
+  # Construct the file path dynamically
+  file_suffix = time_map[time]
+  file_path = f"./datasets/radd/geoparquet/{data_type}_radd_{file_suffix}.geoparquet"
+  
+  # Load and return the dataset
+  return gpd.read_parquet(file_path)
 
-ti_parquet_path = "./datasets/radd/geoparquet/radd_ti_data.geoparquet"
-ti_radd_data = getGeoParquetData(ti_parquet_path)
-
-
-ti_radd_data = ti_radd_data.loc[ti_radd_data["date"]>= pd.to_datetime(start_date)]
+with st.spinner("Carregando dados..."):
+  ti_radd_data = getRaddData(time=time, data_type="ti")
+  buffer_radd_data = getRaddData(time=time, data_type="ti_buffer")
+  
 ti_radd_data["date"] = ti_radd_data["date"].dt.strftime('%d/%m/%Y')
-
-# ti_fire.info()
-
-buffer_parquet_path = "./datasets/radd/geoparquet/radd_buffer_data.geoparquet"
-buffer_radd_data = getGeoParquetData(buffer_parquet_path)
-
-buffer_radd_data = buffer_radd_data.loc[buffer_radd_data["date"]>= pd.to_datetime(start_date)]
 buffer_radd_data["date"] = buffer_radd_data["date"].dt.strftime("%d/%m/%Y")
 
 porj_area = "+proj=aea +lat_1=10 +lat_2=-40 +lat_0=-25 +lon_0=-50 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
@@ -168,10 +176,8 @@ ti_radd_data_proj['area_ha'] = ti_radd_data_proj['geometry'].area/10000
 buffer_radd_data_proj = buffer_radd_data.to_crs(porj_area)
 buffer_radd_data_proj['area_ha'] = buffer_radd_data_proj['geometry'].area/10000
 
-ti_radd_n = round(ti_radd_data_proj["area_ha"].sum())
-ti_radd_n = locale.format_string("%d", ti_radd_n, True)
-buffer_radd_n = round(buffer_radd_data_proj["area_ha"].sum())
-buffer_radd_n = locale.format_string("%d", buffer_radd_n, True)
+ti_radd_n = f"{round(ti_radd_data_proj['area_ha'].sum()):,}".replace(",", ".")
+buffer_radd_n = f"{round(buffer_radd_data_proj['area_ha'].sum()):,}".replace(",", ".")
 
 ## Legend
 template = """
@@ -379,25 +385,25 @@ tooltip_ti=folium.GeoJsonTooltip(
 )
 
 tibp=folium.FeatureGroup(name = "Alertas de desmatamento na área de amortecimento")
-buffer_r=folium.GeoJson(
-  data = buffer_radd_data.to_json(),
-  style_function=lambda x: {
-    "fillColor": "#ff6666",
-    "color": "#ff6666",
-    "fillopacity": 1,
-  },
-  tooltip=tooltip_b,
+buffer_r = folium.GeoJson(
+    data=buffer_radd_data.__geo_interface__,
+    style_function=lambda x: {
+        "fillColor": "#ff6666",
+        "color": "#ff6666",
+        "fillOpacity": 1,  # Corrigindo "fillopacity" para "fillOpacity"
+    },
+    tooltip=tooltip_b,
 ).add_to(tibp)
 
 tilp=folium.FeatureGroup(name = "Alertas de desmatamento na Terra Indígena")
-ti_r=folium.GeoJson(
-  data=ti_radd_data.to_json(),
-  style_function=lambda x: {
-    "fillColor": "red",
-    "color": "red",
-    "fillopacity": 1,
-  },
-  tooltip=tooltip_ti,
+ti_r = folium.GeoJson(
+    data=ti_radd_data.__geo_interface__,
+    style_function=lambda x: {
+        "fillColor": "red",
+        "color": "red",
+        "fillOpacity": 1,  # Corrigindo "fillopacity" para "fillOpacity"
+    },
+    tooltip=tooltip_ti,
 ).add_to(tilp)
 
 # Add a layer control panel to the map
@@ -454,8 +460,9 @@ with row1_col2:
 
 st.divider()
 
-st_folium(
-  m,
-  width = "100%",
-)
+if time:
+  st_folium(
+    m,
+    width = "100%",
+  )
 

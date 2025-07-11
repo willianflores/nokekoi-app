@@ -20,14 +20,14 @@ def loadRaddRasterData():
   response = urlopen(url).read()
   
   # Delete existing file
-  delete_file = "/home/willianflores/localhost/nokekoi_app/datasets/radd/00N_080W.tif"
+  delete_file = "/home/willianflores/localhost/nokekoiApp/datasets/radd/00N_080W.tif"
   
   # If file exists, delete it.
   if os.path.isfile(delete_file) and os.access(delete_file, os.R_OK):
       os.remove(delete_file)
 
   # Set output file name 
-  output_file = "/home/willianflores/localhost/nokekoi_app/datasets/radd/00N_080W.tif"
+  output_file = "/home/willianflores/localhost/nokekoiApp/datasets/radd/00N_080W.tif"
 
   # Open a file in binary write mode
   with open(output_file, "wb") as f:
@@ -58,9 +58,9 @@ def imgClip(inShp, inRas, outRas):
       dst.write(out_image)
       
 ## Run imgClip function  
-inshp = '/home/willianflores/localhost/nokekoi_app/datasets/shp/TI_Campinas_Katukina_Buffer10km_All.shp'
-inRas = '/home/willianflores/localhost/nokekoi_app/datasets/radd/00N_080W.tif'
-outRas = '/home/willianflores/localhost/nokekoi_app/datasets/radd/00N_080W_clip.tif'
+inshp = '/home/willianflores/localhost/nokekoiApp/datasets/shp/TI_Campinas_Katukina_Buffer10km_All.shp'
+inRas = '/home/willianflores/localhost/nokekoiApp/datasets/radd/00N_080W.tif'
+outRas = '/home/willianflores/localhost/nokekoiApp/datasets/radd/00N_080W_clip.tif'
 
 imgClip(inshp,inRas,outRas)
 
@@ -114,9 +114,9 @@ def imgToGeoparquet(radd_path, parquet_path, shp_ti, shp_buffer):
   
   
 # Run imgToGeoparquet function
-radd_path = "/home/willianflores/localhost/nokekoi_app/datasets/radd/00N_080W_clip.tif"
-parquet_path = "/home/willianflores/localhost/nokekoi_app/datasets/radd/geoparquet/"
-shp_ti = "/home/willianflores/localhost/nokekoi_app/datasets/shp/TI_Campinas_Katukina.shp"
-shp_buffer = "/home/willianflores/localhost/nokekoi_app/datasets/shp/TI_Campinas_Katukina_Buffer10km.shp"
+radd_path = "/home/willianflores/localhost/nokekoiApp/datasets/radd/00N_080W_clip.tif"
+parquet_path = "/home/willianflores/localhost/nokekoiApp/datasets/radd/geoparquet/"
+shp_ti = "/home/willianflores/localhost/nokekoiApp/datasets/shp/TI_Campinas_Katukina.shp"
+shp_buffer = "/home/willianflores/localhost/nokekoiApp/datasets/shp/TI_Campinas_Katukina_Buffer10km.shp"
 
 imgToGeoparquet(radd_path, parquet_path, shp_ti, shp_buffer)

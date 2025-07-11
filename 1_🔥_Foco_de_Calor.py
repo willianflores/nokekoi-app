@@ -3,16 +3,14 @@ import pandas as pd
 import geopandas as gpd
 import folium
 from streamlit_folium import st_folium
+from folium.plugins import FastMarkerCluster
 from streamlit_folium import folium_static
 from folium import plugins
 import base64
 import glob
 from datetime import date, timedelta
-
 from streamlit_extras.app_logo import add_logo
-
 from branca.element import Template, MacroElement
-
 import locale
 
 locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
@@ -21,11 +19,30 @@ locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
 st.set_page_config(
   page_title = "Focos de calor na TI Campinas/Katukina", 
   page_icon = "./img/labgama-favicon.png",
-  layout = "wide",
-  
+  layout = "wide",  
 )
 
-st.markdown(" <style> div[class^='block-container'] { padding-top: 8rem; } </style> ", unsafe_allow_html=True)
+st.markdown("""
+    <style>
+        header {visibility: hidden;}
+        div[class^='block-container'] { padding-top: 8rem; }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<head>
+    <meta property="og:title" content="Focos de Calor - TI Campinas/Katukina">
+    <meta property="og:description" content="Monitoramento de focos de calor na Terra Indígena Campinas/Katukina e sua área de amortecimento.">
+    <meta property="og:image" content="./img/labgama-favicon.png">
+    <meta property="og:url" content="https://nokekoi.ufac.br">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Focos de Calor - TI Campinas/Katukina">
+    <meta name="twitter:description" content="Monitoramento de focos de calor na Terra Indígena Campinas/Katukina e sua área de amortecimento.">
+    <meta name="twitter:image" content="./img/labgama-favicon.png">
+</head>
+""", unsafe_allow_html=True)
+
 
 # @st.cache_data
 # def get_base64_of_bin_file(png_file):
@@ -88,7 +105,7 @@ with st.sidebar:
  
   st.sidebar.header("Focos de de calor")
     
-  time = st.selectbox(
+  time = st.radio(
     "Selecione o período de análise:",
     (
       "15 dias",
@@ -126,68 +143,53 @@ with st.sidebar:
     add_logo()
   
 ## Dataset'
-if time == "15 dias":
-  time_filter = 15
-elif time == "1 mês":
-  time_filter = 30  
-elif time == "2 meses":
-  time_filter = 60
-elif time == "3 meses":
-  time_filter = 90
-elif time == "6 meses":
-  time_filter = 180
-elif time == "1 ano":
-  time_filter = 365
+@st.cache_data(ttl=600, hash_funcs={gpd.GeoDataFrame: lambda _: None})
+def getFireData(data_type, time):
+  """
+  Load fire data based on type and time range.
 
-start_date = date.today() - timedelta(days = time_filter)
+  Parameters:
+  data_type (str): The prefix of the dataset ('ti' or 'ti_buffer').
+  time (str): The time range ('15 dias', '1 mês', '2 meses', etc.).
 
-start_date.strftime('%m/%d/%Y')
+  Returns:
+  GeoDataFrame: The loaded GeoParquet data as a GeoDataFrame.
+  """
+  # Define the mapping of time ranges to file suffixes
+  time_map = {
+      "15 dias": "15d",
+      "1 mês": "30d",
+      "2 meses": "60d",
+      "3 meses": "90d",
+      "6 meses": "180d",
+      "1 ano": "365d",
+  }
+  
+  if time not in time_map or data_type not in ["ti", "ti_buffer"]:
+      raise ValueError("Parâmetros inválidos.")
+  
+  file_path = f"./datasets/suomi-npp-viirs-c2/parquet/{data_type}_fire_{time_map[time]}.geoparquet"
+  return gpd.read_parquet(file_path)
 
-@st.cache_data
-def import_shp(shp_path):
+
+
+@st.cache_data(ttl=600, hash_funcs={gpd.GeoDataFrame: lambda _: None})
+def import_shp(parquet_path):
     
-  gdf = gpd.read_file(shp_path)
-    
-  return gdf
+    return gpd.read_parquet(parquet_path)
 
-ti = import_shp("./datasets/shp/TI_Campinas_Katukina.shp")
-ti_buffer = import_shp("./datasets/shp/TI_Campinas_Katukina_Buffer10km.shp")
-
-@st.cache_data
-def getFireData():
-  path ="./datasets/suomi-npp-viirs-c2/parquet/fire_data.parquet"
-  
-  df_fire = pd.read_parquet(path)
-  
-  gdf_fire = gpd.GeoDataFrame(
-    df_fire, 
-    geometry = gpd.points_from_xy(
-      df_fire.longitude, 
-      df_fire.latitude
-    ), 
-    crs="EPSG:4326"
-  )
-  
-  return gdf_fire
-
-gdf_fire = getFireData()
+ti = import_shp("./datasets/shp/TI_Campinas_Katukina.parquet")
+ti_buffer = import_shp("./datasets/shp/TI_Campinas_Katukina_Buffer10km.parquet")
 
 # df_fire.memory_usage(deep=True)
 # df_fire.info()
 # df_fire["confidence"].value_counts()
 
-ti_fire = gdf_fire.clip(ti)
-
-ti_fire = ti_fire.loc[ti_fire["acq_date"]>= pd.to_datetime(start_date)]
-ti_fire["acq_date"] = ti_fire["acq_date"].dt.strftime('%d/%m/%Y')
-
+ti_fire = getFireData("ti", time=time)
 
 # ti_fire.info()
 
-ti_buffer_fire = gdf_fire.clip(ti_buffer)
-
-ti_buffer_fire = ti_buffer_fire.loc[ti_buffer_fire["acq_date"]>= pd.to_datetime(start_date)]
-ti_buffer_fire["acq_date"] = ti_buffer_fire["acq_date"].dt.strftime('%d/%m/%Y')
+ti_buffer_fire = getFireData("ti_buffer", time=time)
 
 ti_fire_n = round(len(ti_fire),0)
 ti_fire_n = locale.format_string("%d", ti_fire_n, True)
@@ -366,37 +368,35 @@ ti = folium.GeoJson(
 
 # ti_buffer_fire = ti_buffer_fire.to_json()
 # ti_buffer_fire = folium.features.GeoJson(ti_buffer_fire)
-tibp = folium.FeatureGroup(name = "Focos de calor na área de amortecimento")
-for i in range(0, len(ti_buffer_fire)):
-  folium.CircleMarker(
-      location = [
-        ti_buffer_fire.iloc[i]["latitude"],
-        ti_buffer_fire.iloc[i]["longitude"],
-      ],
-      radius = 4,
-      color = "#ff6666",
-      fill=True,
-      fill_opacity=0.8,
-      opacity=1,
-      tooltip = "Data: " + str(ti_buffer_fire.iloc[i]["acq_date"]),
-      stroke = False
-  ).add_to(tibp)
+# Criar FeatureGroup para os focos de calor
+tibp = folium.FeatureGroup(name="Focos de calor na área de amortecimento")
+tilp = folium.FeatureGroup(name="Focos de calor na Terra Indígena")
 
-tilp = folium.FeatureGroup(name = "Focos de calor na Terra Indígena")
-for i in range(0, len(ti_fire)):
-  folium.CircleMarker(
-      location = [
-        ti_fire.iloc[i]["latitude"],
-        ti_fire.iloc[i]["longitude"],
-      ],
-      radius = 4,
-      color = "red",
-      fill=True,
-      fill_opacity=0.8,
-      opacity=1,
-      tooltip = "Data: " + str(ti_fire.iloc[i]["acq_date"]),
-      stroke = False
-  ).add_to(tilp)
+# Adicionar todos os pontos da TI ao FeatureGroup
+for _, row in ti_fire.iterrows():
+    folium.CircleMarker(
+        location=[row["latitude"], row["longitude"]],
+        radius=4,
+        color="red",
+        fill=True,
+        fill_opacity=0.8,
+        opacity=1,
+        tooltip=f"Data: {row['acq_date']}",  # Tooltip diretamente no marcador
+        stroke=False
+    ).add_to(tilp)
+
+# Adicionar todos os pontos da área de amortecimento ao FeatureGroup
+for _, row in ti_buffer_fire.iterrows():
+    folium.CircleMarker(
+        location=[row["latitude"], row["longitude"]],
+        radius=4,
+        color="#ff6666",
+        fill=True,
+        fill_opacity=0.8,
+        opacity=1,
+        tooltip=f"Data: {row['acq_date']}",  # Tooltip diretamente no marcador
+        stroke=False
+    ).add_to(tibp)
 
 # Add a layer control panel to the map
 m.add_child(tib)
@@ -446,8 +446,9 @@ with row1_col2:
 
 st.divider()
 
-st_folium(
-  m,
-  width = "100%",
-)
+if time:
+  st_folium(
+    m,
+    width = "100%",
+  )
 
