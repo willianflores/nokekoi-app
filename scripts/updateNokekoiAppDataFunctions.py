@@ -14,6 +14,10 @@ import rasterio
 from rasterio.features import shapes
 from rasterio.mask import mask
 import pyarrow
+from path_config import get_path_config
+
+# Configuração de caminhos inteligente
+PATHS = get_path_config()
 
 ## Load TI and TI Buffer boundaries
 def import_shp(shp_path):
@@ -50,15 +54,20 @@ def send_email_notification(subject, body):
         print(f"Falha ao enviar e-mail: {e}")
 
 def loadTokenFromFile():
-    """Carrega o token salvo do arquivo."""
+    """Carrega o token usando sistema híbrido (env > arquivo)."""
     try:
-        with open("/home/srvadmin/nokekoiApp/datasets/suomi-npp-viirs-c2/token/token.txt", "r") as file:
-            token = file.read().strip()
-            print("Token carregado do arquivo:", token)
-            return {"access_token": token}
-    except FileNotFoundError:
-        print("Arquivo de token não encontrado. Crie um novo token.")
-        return None
+        from token_manager import get_nasa_token
+        return get_nasa_token()
+    except ImportError:
+        # Fallback para compatibilidade
+        try:
+            with open(PATHS['token_file'], "r") as file:
+                token = file.read().strip()
+                print("Token carregado do arquivo:", token)
+                return {"access_token": token}
+        except FileNotFoundError:
+            print("Arquivo de token não encontrado. Crie um novo token.")
+            return None
 
 def loadFirmsData(NTR_TOKEN):
     """Carrega dados da API FIRMS usando o token fornecido."""
@@ -72,13 +81,12 @@ def loadFirmsData(NTR_TOKEN):
     URL_NOAA_20_VIIRS_C2 = "https://nrt4.modaps.eosdis.nasa.gov/archive/FIRMS/noaa-20-viirs-c2/South_America/"
     BASE_NOAA_FILE_NAME = "J1_VIIRS_C2_South_America_VJ114IMGTDL_NRT_"
     FILE_TYPE = ".txt"
-
     TODAY_YDAY = F"{(datetime.now() - timedelta(days=1)).timetuple().tm_yday:03}".__str__()
     TODAY_YEAR = (datetime.now() - timedelta(days=1)).year.__str__()
 
     NOAA_FILE_NAME = BASE_NOAA_FILE_NAME + TODAY_YEAR + TODAY_YDAY + FILE_TYPE
     NOAA_URL = URL_NOAA_20_VIIRS_C2 + NOAA_FILE_NAME
-    NOAA_FOLDER = "/home/srvadmin/nokekoiApp/datasets/suomi-npp-viirs-c2/South_America/" + NOAA_FILE_NAME
+    NOAA_FOLDER = os.path.join(PATHS['suomi_data_path'], NOAA_FILE_NAME)
 
     ## Carregar dados da API
     payload_noaa = {}
@@ -159,8 +167,8 @@ def getFireData(bound, start_date, output_filename):
         None
     """
 
-    path ="/home/srvadmin/nokekoiApp/datasets/suomi-npp-viirs-c2/parquet/fire_data.parquet"
-    output_path = f"/home/srvadmin/nokekoiApp/datasets/suomi-npp-viirs-c2/parquet/{output_filename}.geoparquet"
+    path = os.path.join(PATHS['parquet_path'], 'fire_data.parquet')
+    output_path = os.path.join(PATHS['parquet_path'], f'{output_filename}.geoparquet')
 
     try:
         # Read data as GeoDataFrame
@@ -202,14 +210,14 @@ def loadRaddRasterData():
         response = urlopen(url).read()
       
         # Delete existing file
-        delete_file = "/home/srvadmin/nokekoiApp/datasets/radd/00N_080W.tif"
+        delete_file = os.path.join(PATHS['radd_path'], '00N_080W.tif')
       
         # If file exists, delete it.
         if os.path.isfile(delete_file) and os.access(delete_file, os.R_OK):
             os.remove(delete_file)
 
         # Set output file name 
-        output_file = "/home/srvadmin/nokekoiApp/datasets/radd/00N_080W.tif"
+        output_file = os.path.join(PATHS['radd_path'], '00N_080W.tif')
 
         # Open a file in binary write mode
         with open(output_file, "wb") as f:
@@ -328,7 +336,7 @@ def processRaddData(raster_path, bound, start_date, output_filename):
         gdf_clipped = gdf_clipped.to_crs("EPSG:4326")
 
         # Export to GeoParquet
-        output_path = f"/home/srvadmin/nokekoiApp/datasets/radd/geoparquet/{output_filename}.geoparquet"
+        output_path = os.path.join(PATHS['radd_path'], 'geoparquet', f'{output_filename}.geoparquet')
         gdf_clipped.to_parquet(output_path)
 
         print(f"GeoDataFrame successfully exported to {output_path}")
