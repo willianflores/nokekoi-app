@@ -81,7 +81,9 @@ with st.sidebar:
     unsafe_allow_html=True,
   )
 
-st.markdown("# Descrição da Aplicação e dos Dados Disponibilizados")
+st.markdown("""
+<h1 style="color: white; text-align: center; margin: 30px 0;">Descrição da Aplicação e dos Dados Disponibilizados</h1>
+""", unsafe_allow_html=True)
 
 st.markdown(
   """
