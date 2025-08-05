@@ -127,59 +127,21 @@ st.markdown(
 
 st.markdown('---')
 
-# Grid de logos responsivo
 st.markdown("### Parceiros do Projeto")
 
-# Criar layout responsivo: 1 coluna no mobile, 3 no desktop
-# Verificar se é mobile através do CSS
-st.markdown("""
-<style>
-/* CSS para responsividade das colunas dos logos */
-.logos-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin: 20px 0;
-}
-
-@media (min-width: 768px) {
-    .logos-container {
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-    }
-}
-
-.logo-partner {
-    text-align: center;
-    padding: 10px;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# Layout responsivo com 3 colunas (Streamlit se adapta automaticamente)
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3, gap="large")
 
 with col1:
-    try:
-        ufac_logo = Image.open("img/Ufac_logo.png")
-        st.image(ufac_logo, caption="Universidade Federal do Acre", use_container_width=True)
-    except FileNotFoundError:
-        st.error("Logo UFAC não encontrado")
+    ufac = Image.open("img/Ufac_logo.png")
+    st.image(ufac)
 
 with col2:
-    try:
-        agpn_logo = Image.open("img/Logo_agpn.png")
-        st.image(agpn_logo, caption="Associação dos Geógrafos Profissionais do Norte", use_container_width=True)
-    except FileNotFoundError:
-        st.error("Logo AGPN não encontrado")
-
+    agpn = Image.open("img/Logo_agpn.png")
+    st.image(agpn)
+  
 with col3:
-    try:
-        acre_logo = Image.open("img/Logo_Acre_Transmissora.png")
-        st.image(acre_logo, caption="Transmissora Acre SPE S.A.", use_container_width=True)
-    except FileNotFoundError:
-        st.error("Logo Acre Transmissora não encontrado")
+    acre_transmissora = Image.open("img/Logo_Acre_Transmissora.png")
+    st.image(acre_transmissora)
 
 # Adicionar espaçamento depois dos logos
 st.markdown("---")
