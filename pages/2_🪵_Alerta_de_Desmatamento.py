@@ -330,13 +330,13 @@ template = """
 macro = MacroElement()
 macro._template = Template(template)
 
-# Deforestation map - Configuração otimizada para melhor visualização
+# Deforestation map - Configuração com zoom ajustado
 center = [
   -7.79476, 
   -72.18981
 ]
-# Zoom otimizado para mostrar a Terra Indígena e área de amortecimento
-zoom_start = 13
+# Zoom retornado para 11 conforme solicitado
+zoom_start = 11
 
 # Add custom base maps to folium
 basemaps = {
@@ -622,8 +622,8 @@ if time:
   import streamlit.components.v1 as components
   
   # Configuração responsiva de altura do mapa
-  map_height_desktop = 600  # Altura maior para desktop
-  map_height_mobile = 400   # Altura compacta para mobile
+  map_height_desktop = 700  # Altura aumentada para desktop
+  map_height_mobile = 450   # Altura aumentada para mobile
   
   # Usar altura maior por padrão (assumindo desktop) com CSS responsivo
   map_height = map_height_desktop
@@ -638,19 +638,19 @@ if time:
   
   /* Altura responsiva do mapa */
   .stIframe {
-      height: 600px !important; /* Desktop */
+      height: 700px !important; /* Desktop - aumentado */
   }
   
   @media (max-width: 767px) {
       .stIframe {
-          height: 400px !important; /* Mobile */
+          height: 450px !important; /* Mobile - aumentado */
           margin: 10px 0 !important;
       }
   }
   
   @media (min-width: 768px) and (max-width: 1024px) {
       .stIframe {
-          height: 500px !important; /* Tablet */
+          height: 550px !important; /* Tablet - aumentado */
       }
   }
   </style>
