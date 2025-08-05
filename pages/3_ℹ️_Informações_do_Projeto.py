@@ -82,12 +82,12 @@ with st.sidebar:
   )
 
 st.markdown("""
-<h1 style="color: white; text-align: center; margin: 30px 0;">Descrição da Aplicação e dos Dados Disponibilizados</h1>
+<h1 style="color: white; text-align: center; margin: 30px 0; font-size: 28px;">Descrição da Aplicação e dos Dados Disponibilizados</h1>
 """, unsafe_allow_html=True)
 
 st.markdown(
   """
-  <div style="color: white; line-height: 1.6; font-size: 16px;">
+  <div style="color: white; line-height: 1.8; font-size: 18px;">
     Essa aplicação web foi desenvolvida com o propósito de produzir informações 
     que permitam detectar de forma precoce a alteração da cobertura vegetal na Terra 
     Indígena Campinas/Katukina, ajudando a comunidade indígena a proteger seu patrimônio 
@@ -132,10 +132,10 @@ st.markdown(
 st.markdown('---')
 
 st.markdown("""
-<h3 style="color: white; text-align: center; margin: 20px 0;">Parceiros do Projeto</h3>
+<h3 style="color: white; text-align: center; margin: 20px 0; font-size: 24px;">Parceiros do Projeto</h3>
 """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3, gap="large")
+col1, col2, col3 = st.columns(3, gap="large", vertical_alignment="center")
 
 with col1:
     ufac = Image.open("img/Ufac_logo.png")
