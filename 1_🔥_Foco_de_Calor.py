@@ -150,6 +150,7 @@ st.markdown("""
     }
 }
 </style>
+""", unsafe_allow_html=True)
 
 ## Sidebar
 with st.sidebar:
@@ -167,31 +168,6 @@ with st.sidebar:
       "1 ano"
     )
   )
-  
-  def add_logo():
-    st.markdown(
-        """
-        <style>
-            [data-testid="stSidebarNav"] {
-                background-image: url('./img/Ufac_logo.png');
-                background-repeat: no-repeat;
-                padding-top: 120px;
-                background-position: 20px 20px;
-            }
-            [data-testid="stSidebarNav"]::before {
-                content: "My Company Name";
-                margin-left: 20px;
-                margin-top: 20px;
-                font-size: 30px;
-                position: relative;
-                top: 100px;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-    
-    add_logo()
   
 ## Dataset'
 @st.cache_data(ttl=600, hash_funcs={gpd.GeoDataFrame: lambda _: None})

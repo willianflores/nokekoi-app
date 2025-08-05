@@ -70,6 +70,7 @@ st.markdown("""
     }
 }
 </style>
+""", unsafe_allow_html=True)
 
 ## Get the current year
 current_year = datetime.datetime.now().year
