@@ -127,7 +127,9 @@ st.markdown(
 
 st.markdown('---')
 
-st.markdown("### Parceiros do Projeto")
+st.markdown("""
+<h3 style="color: white; text-align: center; margin: 20px 0;">Parceiros do Projeto</h3>
+""", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3, gap="large")
 
