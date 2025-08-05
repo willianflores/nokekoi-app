@@ -107,7 +107,7 @@ add_logo()
 st.markdown("""
 <div class="mobile-header">
     <div class="app-title">
-        <img src="./img/labgama-favicon.png" alt="Logo" class="header-logo">
+        <img src="../img/labgama-favicon.png" alt="Logo" class="header-logo">
         <span>Nokekoi - Desmatamento</span>
     </div>
 </div>

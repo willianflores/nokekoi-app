@@ -27,7 +27,7 @@ st.markdown("""
 st.markdown("""
 <div class="mobile-header">
     <div class="app-title">
-        <img src="./img/labgama-favicon.png" alt="Logo" class="header-logo">
+        <img src="../img/labgama-favicon.png" alt="Logo" class="header-logo">
         <span>Nokekoi - Informações</span>
     </div>
 </div>
@@ -128,120 +128,61 @@ st.markdown(
 st.markdown('---')
 
 # Grid de logos responsivo
+st.markdown("### Parceiros do Projeto")
+
+# Criar layout responsivo: 1 coluna no mobile, 3 no desktop
+# Verificar se é mobile através do CSS
 st.markdown("""
-<div class="logos-section">
-    <h3>Parceiros do Projeto</h3>
-    <div class="logos-grid">
-        <div class="logo-item">
-            <img src="./img/Ufac_logo.png" alt="UFAC" class="partner-logo">
-            <p>Universidade Federal do Acre</p>
-        </div>
-        <div class="logo-item">
-            <img src="./img/Logo_agpn.png" alt="AGPN" class="partner-logo">
-            <p>Associação dos Geógrafos Profissionais do Norte</p>
-        </div>
-        <div class="logo-item">
-            <img src="./img/Logo_Acre_Transmissora.png" alt="Acre Transmissora" class="partner-logo">
-            <p>Transmissora Acre SPE S.A.</p>
-        </div>
-    </div>
-</div>
-
 <style>
-.logos-section {
-    margin: 40px 0;
-    text-align: center;
+/* CSS para responsividade das colunas dos logos */
+.logos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px 0;
 }
 
-.logos-section h3 {
-    color: #2c3e50;
-    margin-bottom: 30px;
-    font-size: 24px;
-    font-weight: 600;
-}
-
-.logos-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.logo-item {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-}
-
-.logo-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-}
-
-.partner-logo {
-    max-width: 100%;
-    height: auto;
-    max-height: 120px;
-    object-fit: contain;
-    margin-bottom: 16px;
-    filter: grayscale(20%);
-    transition: filter 0.3s ease;
-}
-
-.logo-item:hover .partner-logo {
-    filter: grayscale(0%);
-}
-
-.logo-item p {
-    color: #666;
-    font-size: 14px;
-    font-weight: 500;
-    margin: 0;
-    line-height: 1.4;
-}
-
-/* Responsividade */
 @media (min-width: 768px) {
-    .logos-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 40px;
-    }
-    
-    .partner-logo {
-        max-height: 140px;
-    }
-    
-    .logo-item p {
-        font-size: 15px;
+    .logos-container {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
     }
 }
 
-@media (min-width: 1024px) {
-    .logos-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .partner-logo {
-        max-height: 160px;
-    }
-    
-    .logo-item p {
-        font-size: 16px;
-    }
-}
-
-@media (min-width: 1200px) {
-    .logos-section {
-        padding: 0 20px;
-    }
+.logo-partner {
+    text-align: center;
+    padding: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
+
+# Layout responsivo com 3 colunas (Streamlit se adapta automaticamente)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    try:
+        ufac_logo = Image.open("img/Ufac_logo.png")
+        st.image(ufac_logo, caption="Universidade Federal do Acre", use_column_width=True)
+    except FileNotFoundError:
+        st.error("Logo UFAC não encontrado")
+
+with col2:
+    try:
+        agpn_logo = Image.open("img/Logo_agpn.png")
+        st.image(agpn_logo, caption="Associação dos Geógrafos Profissionais do Norte", use_column_width=True)
+    except FileNotFoundError:
+        st.error("Logo AGPN não encontrado")
+
+with col3:
+    try:
+        acre_logo = Image.open("img/Logo_Acre_Transmissora.png")
+        st.image(acre_logo, caption="Transmissora Acre SPE S.A.", use_column_width=True)
+    except FileNotFoundError:
+        st.error("Logo Acre Transmissora não encontrado")
+
+# Adicionar espaçamento depois dos logos
+st.markdown("---")
 
 # Navegação inferior para mobile
 st.markdown("""
