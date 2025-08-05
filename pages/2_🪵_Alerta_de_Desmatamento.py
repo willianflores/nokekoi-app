@@ -18,6 +18,7 @@ from rasterio.features import shapes
 from branca.element import Template, MacroElement
 
 import locale
+from mobile_responsive_improvements import apply_mobile_first_improvements
 
 locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
 
@@ -25,14 +26,20 @@ locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
 st.set_page_config(
   page_title = "Alertas de desmatamento na TI Campinas/Katukina", 
   page_icon = "./img/labgama-favicon.png",
-  layout = "wide",  
+  layout = "wide",
+  initial_sidebar_state = "collapsed"
 )
 
+# Aplicar melhorias Mobile-First
+apply_mobile_first_improvements()
+
+# Meta tags para responsividade
 st.markdown("""
-    <style>
-        header {visibility: hidden;}
-        div[class^='block-container'] { padding-top: 8rem; }
-    </style>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0066cc">
+</head>
 """, unsafe_allow_html=True)
 
 # @st.cache_data
@@ -95,6 +102,54 @@ def add_logo():
   st.logo('./img/Ufac_logo.png')
   
 add_logo()
+
+# Header mobile
+st.markdown("""
+<div class="mobile-header">
+    <div class="app-title">
+        <img src="./img/labgama-favicon.png" alt="Logo" class="header-logo">
+        <span>Nokekoi - Desmatamento</span>
+    </div>
+</div>
+
+<style>
+.mobile-header {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 60px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.app-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.header-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+@media (max-width: 767px) {
+    .mobile-header {
+        display: flex;
+    }
+}
+</style>
 
 ## Sidebar
 with st.sidebar:
@@ -446,23 +501,210 @@ plugins.MeasureControl(
 ).add_to(m)
  
 
-## Dashboard
+## Dashboard Mobile-First
 
-row1_col1, row1_col2 = st.columns(2)
+# Cards de métricas responsivos para desmatamento
+metrics_html = f"""
+<div class="metrics-container">
+    <div class="metric-card deforestation">
+        <div class="metric-title">Alertas de desmatamento na TI</div>
+        <div class="metric-value">{ti_radd_n} ha</div>
+        <div class="metric-description">Terra Indígena Campinas/Katukina</div>
+    </div>
+    <div class="metric-card deforestation">
+        <div class="metric-title">Alertas na área de amortecimento</div>
+        <div class="metric-value">{buffer_radd_n} ha</div>
+        <div class="metric-description">Zona de proteção (buffer 10km)</div>
+    </div>
+</div>
+"""
 
-with row1_col1:
-    st.write('**Alertas de desmatamento na TI:**')
-    st.info(f"{ti_radd_n} ha")
+st.markdown(metrics_html, unsafe_allow_html=True)
 
-with row1_col2:
-    st.write('**Alertas de desmatametno na área de amortecimento:**')
-    st.info(f"{buffer_radd_n} ha")
+# CSS separado para evitar problemas de parsing
+st.markdown("""
+<style>
+.metrics-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.metric-card.deforestation {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    color: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card.deforestation::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+    pointer-events: none;
+}
+
+.metric-card.deforestation:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+}
+
+.metric-title {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.metric-description {
+    font-size: 12px;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+@media (min-width: 768px) {
+    .metrics-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+    
+    .metric-card.deforestation {
+        padding: 24px;
+    }
+    
+    .metric-value {
+        font-size: 32px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .metrics-container {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 800px;
+        margin: 20px auto;
+    }
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.divider()
 
 if time:
-  st_folium(
+  # Mapa otimizado para mobile
+  st.markdown("""
+  <style>
+  .stIframe iframe {
+      border-radius: 12px !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+  }
+  
+  /* Otimizações específicas do mapa para mobile */
+  @media (max-width: 767px) {
+      .stIframe {
+          margin: 10px 0 !important;
+      }
+  }
+  </style>
+  """, unsafe_allow_html=True)
+  
+  # Renderizar mapa com configurações responsivas
+  map_data = st_folium(
     m,
-    width = "100%",
+    width="100%",
+    height=400,  # Altura fixa otimizada para mobile
+    returned_data=["last_clicked", "last_object_clicked"],
+    key="mobile_deforestation_map"
   )
+
+# Navegação inferior para mobile
+st.markdown("""
+<div class="bottom-nav">
+    <a href="../" class="nav-item">
+        <div class="nav-icon">🔥</div>
+        <div class="nav-label">Focos</div>
+    </a>
+    <a href="#" class="nav-item active">
+        <div class="nav-icon">🪵</div>
+        <div class="nav-label">Desmate</div>
+    </a>
+    <a href="3_ℹ️_Informações_do_Projeto" class="nav-item">
+        <div class="nav-icon">ℹ️</div>
+        <div class="nav-label">Info</div>
+    </a>
+</div>
+
+<style>
+.bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top: 1px solid #e0e0e0;
+    padding: 8px 0;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #666;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    min-width: 60px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: #ee5a24;
+    background: #fff5f5;
+}
+
+.nav-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+@media (max-width: 767px) {
+    .bottom-nav {
+        display: flex;
+    }
+    
+    /* Adicionar espaço no rodapé para compensar navbar */
+    .main .block-container {
+        padding-bottom: 80px !important;
+    }
+}
+</style>
+""", unsafe_allow_html=True)
 
