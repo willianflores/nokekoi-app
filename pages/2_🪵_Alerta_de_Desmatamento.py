@@ -631,7 +631,6 @@ if time:
     m,
     width="100%",
     height=400,  # Altura fixa otimizada para mobile
-    returned_data=["last_clicked", "last_object_clicked"],
     key="mobile_deforestation_map"
   )
 

@@ -262,7 +262,6 @@ def mobile_optimized_folium_map(map_data, height=400):
     mobile_map_config = {
         'width': '100%',
         'height': height,
-        'returned_data': ['last_clicked', 'last_object_clicked'],
         'key': 'mobile_optimized_map'
     }
     

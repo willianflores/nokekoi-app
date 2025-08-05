@@ -370,7 +370,6 @@ def mobile_friendly_map_config():
     return {
         'width': '100%',
         'height': 400,  # Altura fixa menor para mobile
-        'returned_data': ['last_clicked', 'bounds'],
         'key': 'mobile_map'
     }
 
