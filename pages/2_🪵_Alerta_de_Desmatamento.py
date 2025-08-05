@@ -546,34 +546,35 @@ st.markdown("""
 
 .content-wrapper {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
 }
 
 /* Seção de métricas otimizada */
 .metrics-section {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .metrics-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 10px;
     width: 100%;
+    margin: 0;
 }
 
 .metric-card.deforestation {
     background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
     color: white;
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
-    gap: 15px;
-    min-height: 80px;
+    gap: 12px;
+    min-height: 70px;
 }
 
 .metric-card.deforestation::before {
@@ -630,21 +631,21 @@ st.markdown("""
 /* Tablet e Desktop */
 @media (min-width: 768px) {
     .content-wrapper {
-        padding: 20px;
+        padding: 10px;
     }
     
     .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 15px;
     }
     
     .metric-card.deforestation {
-        padding: 20px;
-        min-height: 100px;
+        padding: 15px;
+        min-height: 85px;
     }
     
     .metric-icon {
-        font-size: 36px;
+        font-size: 34px;
     }
     
     .metric-title {
@@ -652,7 +653,7 @@ st.markdown("""
     }
     
     .metric-value {
-        font-size: 28px;
+        font-size: 26px;
     }
     
     .metric-description {
@@ -665,48 +666,48 @@ st.markdown("""
     .content-wrapper {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 30px;
+        padding: 15px;
     }
     
     .metrics-grid {
-        gap: 25px;
+        gap: 18px;
     }
     
     .metric-card.deforestation {
-        padding: 25px;
-        min-height: 120px;
+        padding: 18px;
+        min-height: 95px;
     }
     
     .metric-icon {
-        font-size: 40px;
+        font-size: 36px;
     }
     
     .metric-value {
-        font-size: 32px;
+        font-size: 28px;
     }
 }
 
 /* Mobile - ajustes específicos */
 @media (max-width: 767px) {
     .content-wrapper {
-        padding: 15px 10px;
+        padding: 8px;
     }
     
     .metrics-section {
-        margin-bottom: 15px;
+        margin-bottom: 5px;
     }
     
     .metric-card.deforestation {
-        min-height: 75px;
-        padding: 15px;
+        min-height: 65px;
+        padding: 10px;
     }
     
     .metric-icon {
-        font-size: 28px;
+        font-size: 26px;
     }
     
     .metric-value {
-        font-size: 22px;
+        font-size: 20px;
     }
 }
 </style>
