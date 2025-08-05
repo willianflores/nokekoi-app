@@ -503,45 +503,77 @@ plugins.MeasureControl(
 ).add_to(m)
  
 
-## Dashboard Mobile-First
+## Layout Otimizado - Cards e Mapa de Desmatamento
 
-# Cards de métricas responsivos para desmatamento
-metrics_html = f"""
-<div class="metrics-container">
-    <div class="metric-card deforestation">
-        <div class="metric-title">Alertas de desmatamento na TI</div>
-        <div class="metric-value">{ti_radd_n} ha</div>
-        <div class="metric-description">Terra Indígena Campinas/Katukina</div>
-    </div>
-    <div class="metric-card deforestation">
-        <div class="metric-title">Alertas na área de amortecimento</div>
-        <div class="metric-value">{buffer_radd_n} ha</div>
-        <div class="metric-description">Zona de proteção (buffer 10km)</div>
+# Layout responsivo com distribuição perfeita
+st.markdown("""
+<div class="main-container">
+    <div class="content-wrapper">
+        <!-- Cards Section -->
+        <div class="metrics-section">
+            <div class="metrics-grid">
+                <div class="metric-card deforestation">
+                    <div class="metric-icon">🪵</div>
+                    <div class="metric-content">
+                        <div class="metric-title">Alertas de desmatamento na TI</div>
+                        <div class="metric-value">""" + str(ti_radd_n) + """ ha</div>
+                        <div class="metric-description">Terra Indígena Campinas/Katukina</div>
+                    </div>
+                </div>
+                <div class="metric-card deforestation">
+                    <div class="metric-icon">🛡️</div>
+                    <div class="metric-content">
+                        <div class="metric-title">Alertas na área de amortecimento</div>
+                        <div class="metric-value">""" + str(buffer_radd_n) + """ ha</div>
+                        <div class="metric-description">Zona de proteção (buffer 10km)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-"""
+""", unsafe_allow_html=True)
 
-st.markdown(metrics_html, unsafe_allow_html=True)
-
-# CSS separado para evitar problemas de parsing
+# CSS otimizado para layout perfeito de desmatamento
 st.markdown("""
 <style>
-.metrics-container {
+/* Container principal simplificado */
+.main-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.content-wrapper {
+    width: 100%;
+    padding: 10px;
+}
+
+/* Seção de métricas otimizada */
+.metrics-section {
+    margin-bottom: 10px;
+}
+
+.metrics-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
-    margin: 20px 0;
+    gap: 15px;
+    width: 100%;
 }
 
 .metric-card.deforestation {
     background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
     color: white;
     border-radius: 16px;
-    padding: 20px;
+    padding: 16px;
     box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 80px;
 }
 
 .metric-card.deforestation::before {
@@ -556,40 +588,97 @@ st.markdown("""
 }
 
 .metric-card.deforestation:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
 }
 
-.metric-title {
-    font-size: 14px;
-    opacity: 0.9;
-    margin-bottom: 8px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.metric-value {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 8px;
+.metric-icon {
+    font-size: 32px;
+    flex-shrink: 0;
     text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.metric-description {
-    font-size: 12px;
-    opacity: 0.8;
-    font-style: italic;
+.metric-content {
+    flex: 1;
 }
 
+.metric-title {
+    font-size: 13px;
+    opacity: 0.9;
+    margin-bottom: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.metric-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    color: #ffffff;
+}
+
+.metric-description {
+    font-size: 11px;
+    opacity: 0.8;
+    font-style: italic;
+    line-height: 1.3;
+}
+
+/* Tablet e Desktop */
 @media (min-width: 768px) {
-    .metrics-container {
+    .content-wrapper {
+        padding: 20px;
+    }
+    
+    .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
+        gap: 20px;
     }
     
     .metric-card.deforestation {
-        padding: 24px;
+        padding: 20px;
+        min-height: 100px;
+    }
+    
+    .metric-icon {
+        font-size: 36px;
+    }
+    
+    .metric-title {
+        font-size: 14px;
+    }
+    
+    .metric-value {
+        font-size: 28px;
+    }
+    
+    .metric-description {
+        font-size: 12px;
+    }
+}
+
+/* Desktop grande */
+@media (min-width: 1200px) {
+    .content-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px;
+    }
+    
+    .metrics-grid {
+        gap: 25px;
+    }
+    
+    .metric-card.deforestation {
+        padding: 25px;
+        min-height: 120px;
+    }
+    
+    .metric-icon {
+        font-size: 40px;
     }
     
     .metric-value {
@@ -597,11 +686,27 @@ st.markdown("""
     }
 }
 
-@media (min-width: 1024px) {
-    .metrics-container {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 800px;
-        margin: 20px auto;
+/* Mobile - ajustes específicos */
+@media (max-width: 767px) {
+    .content-wrapper {
+        padding: 15px 10px;
+    }
+    
+    .metrics-section {
+        margin-bottom: 15px;
+    }
+    
+    .metric-card.deforestation {
+        min-height: 75px;
+        padding: 15px;
+    }
+    
+    .metric-icon {
+        font-size: 28px;
+    }
+    
+    .metric-value {
+        font-size: 22px;
     }
 }
 </style>
@@ -610,58 +715,96 @@ st.markdown("""
 st.divider()
 
 if time:
-  # Detectar tamanho da tela para altura responsiva
+  # Container do mapa com layout otimizado
   st.markdown("""
-  <script>
-  // Detectar largura da tela e definir altura do mapa
-  window.mapHeight = window.innerWidth > 768 ? 600 : 400;
-  </script>
+  <div class="map-container">
+      <div class="map-section">
+          <h3 class="map-title">🗺️ Mapa Interativo de Alertas de Desmatamento</h3>
+      </div>
+  </div>
   """, unsafe_allow_html=True)
   
-  # Calcular altura responsiva baseada na largura da viewport  
-  import streamlit.components.v1 as components
-  
-  # Configuração responsiva de altura do mapa
-  map_height_desktop = 700  # Altura aumentada para desktop
-  map_height_mobile = 450   # Altura aumentada para mobile
-  
-  # Usar altura maior por padrão (assumindo desktop) com CSS responsivo
-  map_height = map_height_desktop
-  
-  # Mapa otimizado para diferentes tamanhos de tela
+  # CSS otimizado para o mapa de desmatamento
   st.markdown("""
   <style>
+  .map-container {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+  }
+  
+  .map-section {
+      margin-bottom: 15px;
+  }
+  
+  .map-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 15px 0;
+      text-align: center;
+      padding: 10px;
+      background: linear-gradient(135deg, #fff0f0 0%, #ffe6e6 100%);
+      border-radius: 10px;
+      border-left: 4px solid #ff6b6b;
+  }
+  
+  /* Otimização do iframe do mapa */
+  .stIframe {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      box-shadow: 0 8px 32px rgba(255, 107, 107, 0.15) !important;
+  }
+  
   .stIframe iframe {
       border-radius: 12px !important;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+      box-shadow: none !important;
+      border: none !important;
   }
   
-  /* Altura responsiva do mapa */
+  /* Altura fixa e responsiva do mapa */
   .stIframe {
-      height: 700px !important; /* Desktop - aumentado */
+      height: 600px !important; /* Desktop padrão */
   }
   
+  /* Mobile - altura otimizada */
   @media (max-width: 767px) {
+      .map-title {
+          font-size: 18px;
+          padding: 8px;
+      }
+      
       .stIframe {
-          height: 450px !important; /* Mobile - aumentado */
-          margin: 10px 0 !important;
+          height: 450px !important; /* Mobile */
+          margin: 0 !important;
       }
   }
   
+  /* Tablet - altura intermediária */
   @media (min-width: 768px) and (max-width: 1024px) {
       .stIframe {
-          height: 550px !important; /* Tablet - aumentado */
+          height: 550px !important; /* Tablet */
+      }
+  }
+  
+  /* Desktop - altura otimizada */
+  @media (min-width: 1025px) {
+      .stIframe {
+          height: 650px !important; /* Desktop */
       }
   }
   </style>
   """, unsafe_allow_html=True)
   
-  # Renderizar mapa com configurações responsivas
+  # Renderizar mapa com configurações otimizadas
   map_data = st_folium(
     m,
     width="100%",
-    height=map_height,  # Altura responsiva otimizada
-    key="mobile_deforestation_map"
+    height=600,  # Valor base, será sobrescrito pelo CSS
+    key="optimized_deforestation_map"
   )
 
 # Navegação inferior para mobile
