@@ -163,21 +163,21 @@ col1, col2, col3 = st.columns(3)
 with col1:
     try:
         ufac_logo = Image.open("img/Ufac_logo.png")
-        st.image(ufac_logo, caption="Universidade Federal do Acre", use_column_width=True)
+        st.image(ufac_logo, caption="Universidade Federal do Acre", use_container_width=True)
     except FileNotFoundError:
         st.error("Logo UFAC não encontrado")
 
 with col2:
     try:
         agpn_logo = Image.open("img/Logo_agpn.png")
-        st.image(agpn_logo, caption="Associação dos Geógrafos Profissionais do Norte", use_column_width=True)
+        st.image(agpn_logo, caption="Associação dos Geógrafos Profissionais do Norte", use_container_width=True)
     except FileNotFoundError:
         st.error("Logo AGPN não encontrado")
 
 with col3:
     try:
         acre_logo = Image.open("img/Logo_Acre_Transmissora.png")
-        st.image(acre_logo, caption="Transmissora Acre SPE S.A.", use_column_width=True)
+        st.image(acre_logo, caption="Transmissora Acre SPE S.A.", use_container_width=True)
     except FileNotFoundError:
         st.error("Logo Acre Transmissora não encontrado")
 
