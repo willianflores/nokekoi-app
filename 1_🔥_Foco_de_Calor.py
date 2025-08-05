@@ -318,12 +318,13 @@ template = """
 macro = MacroElement()
 macro._template = Template(template)
 
-# Fire map
+# Fire map - Configuração otimizada para melhor visualização
 center = [
   -7.79476, 
   -72.18981
 ]
-zoom_start = 11
+# Zoom otimizado para mostrar a Terra Indígena e área de amortecimento
+zoom_start = 13
 
 # Add custom base maps to folium
 basemaps = {
@@ -566,7 +567,25 @@ st.markdown("""
 st.divider()
 
 if time:
-  # Mapa otimizado para mobile
+  # Detectar tamanho da tela para altura responsiva
+  st.markdown("""
+  <script>
+  // Detectar largura da tela e definir altura do mapa
+  window.mapHeight = window.innerWidth > 768 ? 600 : 400;
+  </script>
+  """, unsafe_allow_html=True)
+  
+  # Calcular altura responsiva baseada na largura da viewport  
+  import streamlit.components.v1 as components
+  
+  # Configuração responsiva de altura do mapa
+  map_height_desktop = 600  # Altura maior para desktop
+  map_height_mobile = 400   # Altura compacta para mobile
+  
+  # Usar altura maior por padrão (assumindo desktop) com CSS responsivo
+  map_height = map_height_desktop
+  
+  # Mapa otimizado para diferentes tamanhos de tela
   st.markdown("""
   <style>
   .stIframe iframe {
@@ -574,10 +593,21 @@ if time:
       box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
   }
   
-  /* Otimizações específicas do mapa para mobile */
+  /* Altura responsiva do mapa */
+  .stIframe {
+      height: 600px !important; /* Desktop */
+  }
+  
   @media (max-width: 767px) {
       .stIframe {
+          height: 400px !important; /* Mobile */
           margin: 10px 0 !important;
+      }
+  }
+  
+  @media (min-width: 768px) and (max-width: 1024px) {
+      .stIframe {
+          height: 500px !important; /* Tablet */
       }
   }
   </style>
@@ -587,7 +617,7 @@ if time:
   map_data = st_folium(
     m,
     width="100%",
-    height=400,  # Altura fixa otimizada para mobile
+    height=map_height,  # Altura responsiva otimizada
     key="mobile_fire_map"
   )
 

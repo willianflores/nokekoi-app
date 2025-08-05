@@ -1,17 +1,30 @@
 ## Import libraries
 import requests
-
-#import json
+import os
 from datetime import datetime, timedelta, date
 import pytz
 import pandas as pd
-import os
 import glob
+from dotenv import load_dotenv
+from path_config import get_path_config
+
+# Carrega variáveis de ambiente e configuração de caminhos
+load_dotenv()
+PATHS = get_path_config()
 
 ## Load FIRMS data function
 def loadFirmsData():
     ## Variables
-    NTR_TOKEN = "eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiVXNlciIsInVpZCI6IndpbGxpYW5mbG9yZXNhYyIsImV4cCI6MTcyMzg0NTcwMSwiaWF0IjoxNzE4NjYxNzAxLCJpc3MiOiJFYXJ0aGRhdGEgTG9naW4ifQ.2Uikk3W-0E07Oxj9X71Hfa3eJvVzYpCB0wU-Cwuj8CUOs9SBITOxyNPb5wabuw41aVcynfT-UtYmiUqzqL3K3mZAuEkxIGD5-tCjdFEWTt0QrEegdF7Xm-z2dz5oT3IV4zOhaJAjMoC3IMUj5ODG-CRhttf7a45RCXM8iC3GxBmr0MxgKvfAyFwO1rPJK0_0B8tPTWartVBzeOeXrUkgun3w3gS4qllRth5LWdn0W3T0SKxmKxvCu3a_S9jsndIGSXwYqQRqWE2e-RErhGJVCgcoUfydzmlr3g6-Zi4Oo3p3vHTVC2Bj2xPKczea56N0JwI7DOFJIeGbb_VyBfJUog"
+    # Obtém token usando sistema híbrido
+    try:
+        from token_manager import get_nasa_token
+        token_data = get_nasa_token()
+        NTR_TOKEN = token_data["access_token"]
+    except ImportError:
+        # Fallback para variável de ambiente
+        NTR_TOKEN = os.getenv('NTR_TOKEN')
+        if not NTR_TOKEN or NTR_TOKEN == 'your_nasa_token_here':
+            raise ValueError("NTR_TOKEN não encontrado nas variáveis de ambiente. Configure o arquivo .env")
     # URL_NOAA_20_VIIRS_C2 = "https://nrt4.modaps.eosdis.nasa.gov/api/v2/content/archives/FIRMS/noaa-20-viirs-c2/South_America/"
     URL_SUOMI_VIIRS_C2 = "https://nrt4.modaps.eosdis.nasa.gov/api/v2/content/archives/FIRMS/suomi-npp-viirs-c2/South_America/"
     # BASE_NOAA_FILE_NAME = "J1_VIIRS_C2_South_America_VJ114IMGTDL_NRT_"

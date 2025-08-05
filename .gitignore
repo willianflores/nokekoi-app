@@ -119,8 +119,6 @@ Thumbs.db
 *.backup
 backup/
 backups/
-Backup/
-**/Backup/
 
 # Email templates
 *.html.bak

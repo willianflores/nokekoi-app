@@ -1,6 +1,10 @@
 import requests
 import base64
 import datetime
+from path_config import get_path_config
+
+# Configuração de caminhos inteligente
+PATHS = get_path_config()
 
 # Settings
 USERNAME = "willianfloresac"
@@ -37,7 +41,7 @@ def createToken():
         token_data = response.json()
         print("Novo token gerado:", token_data)
         # Save the token in a file
-        with open("/home/srvadmin/nokekoiApp/datasets/suomi-npp-viirs-c2/token/token.txt", "w") as file:
+        with open(PATHS['token_file'], "w") as file:
             file.write(token_data["access_token"])
         return token_data
     else:
