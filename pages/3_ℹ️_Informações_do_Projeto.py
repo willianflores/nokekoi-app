@@ -25,14 +25,9 @@ st.markdown("""
 <style>
 /* Controle do sidebar responsivo */
 @media (max-width: 767px) {
-    /* Mobile - sidebar colapsado por padrão */
+    /* Mobile - permitir que o sidebar funcione normalmente */
     [data-testid="stSidebar"] {
-        transform: translateX(-100%) !important;
-    }
-    
-    /* Mostrar sidebar apenas quando ativo */
-    [data-testid="stSidebar"][data-state="expanded"] {
-        transform: translateX(0) !important;
+        /* Remover transform forçado para permitir funcionamento normal */
     }
 }
 
