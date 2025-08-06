@@ -12,7 +12,7 @@ from datetime import date, timedelta
 from streamlit_extras.app_logo import add_logo
 from branca.element import Template, MacroElement
 import locale
-from mobile_responsive_improvements import apply_mobile_first_improvements
+
 
 locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
 
@@ -24,8 +24,7 @@ st.set_page_config(
   initial_sidebar_state = "collapsed"
 )
 
-# Aplicar melhorias Mobile-First
-apply_mobile_first_improvements()
+
 
 # Meta tags para SEO e responsividade
 st.markdown("""
@@ -88,20 +87,7 @@ st.markdown("""
 
 # add_logo('./img/Ufac_logo.png')
 
-st.html("""
-  <style>
-    [alt=Logo] {
-      height: 70%;
-      margin-top: 10%;
-      margin-bottom: 0%;
-      margin-left: 5%;
-      margin-right: 5%;
-    }
-  </style>
-        """
-)
 
-st.logo('./img/Ufac_logo.png')
 
 # Header mobile com menu
 st.markdown("""
@@ -154,8 +140,24 @@ st.markdown("""
 
 ## Sidebar
 with st.sidebar:
- 
-  st.sidebar.header("Focos de de calor")
+  # Logo no sidebar
+  st.logo('./img/Ufac_logo.png')
+  
+  # CSS para o logo no sidebar
+  st.markdown("""
+  <style>
+  [data-testid="stSidebar"] [alt="Logo"] {
+    height: 60px !important;
+    width: auto !important;
+    margin: 10px auto !important;
+    display: block !important;
+  }
+  </style>
+  """, unsafe_allow_html=True)
+  
+  st.markdown("""
+<h3 style="font-size: 24px; margin-bottom: 10px;">Focos de calor</h3>
+""", unsafe_allow_html=True)
     
   time = st.radio(
     "Selecione o período de análise:",
@@ -480,7 +482,7 @@ st.markdown("""
                 <div class="metric-card">
                     <div class="metric-icon">🛡️</div>
                     <div class="metric-content">
-                        <div class="metric-title">Focos na área de amortecimento</div>
+                        <div class="metric-title">Focos de carlor na área de amortecimento</div>
                         <div class="metric-value">""" + str(buffer_fire_n) + """</div>
                         <div class="metric-description">Zona de proteção (buffer 10km)</div>
                     </div>

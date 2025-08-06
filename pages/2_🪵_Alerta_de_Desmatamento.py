@@ -18,7 +18,7 @@ from rasterio.features import shapes
 from branca.element import Template, MacroElement
 
 import locale
-from mobile_responsive_improvements import apply_mobile_first_improvements
+
 
 locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
 
@@ -30,8 +30,7 @@ st.set_page_config(
   initial_sidebar_state = "collapsed"
 )
 
-# Aplicar melhorias Mobile-First
-apply_mobile_first_improvements()
+
 
 # Meta tags para responsividade
 st.markdown("""
@@ -84,24 +83,7 @@ st.markdown("""
 
 # add_logo('./img/Ufac_logo.png')
 
-## Add logo to sidebar
-def add_logo():
-  st.html("""
-    <style>
-      [alt=Logo] {
-        height: 70%;
-        margin-top: 10%;
-        margin-bottom: 0%;
-        margin-left: 5%;
-        margin-right: 5%;
-      }
-    </style>
-          """
-  )
 
-  st.logo('./img/Ufac_logo.png')
-  
-add_logo()
 
 # Header mobile
 st.markdown("""
@@ -154,8 +136,22 @@ st.markdown("""
 
 ## Sidebar
 with st.sidebar:
-  #st.image(logo, width=300)
-  st.sidebar.header("Alertas de desmatameto")
+  # Logo no sidebar
+  st.logo('./img/Ufac_logo.png')
+  
+  # CSS para o logo no sidebar
+  st.markdown("""
+  <style>
+  [data-testid="stSidebar"] [alt="Logo"] {
+    height: 60px !important;
+    width: auto !important;
+    margin: 10px auto !important;
+    display: block !important;
+  }
+  </style>
+  """, unsafe_allow_html=True)
+  
+  st.sidebar.header("Alertas de desmatamento")
     
   time = st.radio(
     "Selecione o período de análise:",
@@ -523,7 +519,7 @@ st.markdown("""
                 <div class="metric-card deforestation">
                     <div class="metric-icon">🛡️</div>
                     <div class="metric-content">
-                        <div class="metric-title">Alertas na área de amortecimento</div>
+                        <div class="metric-title">Alertas de desmatamento na área de amortecimento</div>
                         <div class="metric-value">""" + str(buffer_radd_n) + """ ha</div>
                         <div class="metric-description">Zona de proteção (buffer 10km)</div>
                     </div>

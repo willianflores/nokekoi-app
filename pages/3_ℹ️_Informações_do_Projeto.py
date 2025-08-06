@@ -1,18 +1,16 @@
 import datetime
 import streamlit as st
 from PIL import Image
-from mobile_responsive_improvements import apply_mobile_first_improvements
+
 
 ## Page configuration
 st.set_page_config(
   page_title = "Informações sobre o projeto", 
   page_icon = "./img/labgama-favicon.png",
-  layout = "wide",
   initial_sidebar_state = "collapsed"
 )
 
-# Aplicar melhorias Mobile-First
-apply_mobile_first_improvements()
+
 
 # Meta tags para responsividade
 st.markdown("""
@@ -135,19 +133,21 @@ st.markdown("""
 <h3 style="color: white; text-align: center; margin: 20px 0; font-size: 24px;">Parceiros do Projeto</h3>
 """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3, gap="large", vertical_alignment="center")
-
-with col1:
-    ufac = Image.open("img/Ufac_logo.png")
-    st.image(ufac)
-
-with col2:
-    agpn = Image.open("img/Logo_agpn.png")
-    st.image(agpn)
-  
-with col3:
-    acre_transmissora = Image.open("img/Logo_Acre_Transmissora.png")
-    st.image(acre_transmissora)
+# Container para centralizar os logos
+with st.container():
+    col1, col2, col3 = st.columns(3, gap="large", vertical_alignment="center")
+    
+    with col1:
+        ufac = Image.open("img/Ufac_logo.png")
+        st.image(ufac, use_container_width=True)
+    
+    with col2:
+        agpn = Image.open("img/Logo_agpn.png")
+        st.image(agpn, use_container_width=True)
+      
+    with col3:
+        acre_transmissora = Image.open("img/Logo_Acre_Transmissora.png")
+        st.image(acre_transmissora, use_container_width=True)
 
 # Adicionar espaçamento depois dos logos
 st.markdown("---")
