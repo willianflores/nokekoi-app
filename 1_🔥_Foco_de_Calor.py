@@ -426,7 +426,7 @@ for _, row in ti_fire.iterrows():
         fill=True,
         fill_opacity=0.8,
         opacity=1,
-        tooltip=f"Data: {row['acq_date']}",  # Tooltip diretamente no marcador
+        tooltip=f"{row['acq_date']}",  # Tooltip simplificado
         stroke=False
     ).add_to(tilp)
 
@@ -439,7 +439,7 @@ for _, row in ti_buffer_fire.iterrows():
         fill=True,
         fill_opacity=0.8,
         opacity=1,
-        tooltip=f"Data: {row['acq_date']}",  # Tooltip diretamente no marcador
+        tooltip=f"{row['acq_date']}",  # Tooltip simplificado
         stroke=False
     ).add_to(tibp)
 

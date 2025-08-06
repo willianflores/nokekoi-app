@@ -429,7 +429,7 @@ ti = folium.GeoJson(
 
 tooltip_b=folium.GeoJsonTooltip(
     fields=["date"],
-    aliases=["Data:"],
+    aliases=[""],
     localize=True,
     sticky=False,
     labels=True,
@@ -438,14 +438,14 @@ tooltip_b=folium.GeoJsonTooltip(
         border: 2px solid black;
         border-radius: 3px;
         box-shadow: 3px;
-        font-size: 50px;
+        font-size: 12px;
     """,
-    max_width=800,
+    max_width=200,
 )
 
 tooltip_ti=folium.GeoJsonTooltip(
     fields=["date"],
-    aliases=["Data:"],
+    aliases=[""],
     localize=True,
     sticky=False,
     labels=True,
@@ -454,8 +454,9 @@ tooltip_ti=folium.GeoJsonTooltip(
         border: 2px solid black;
         border-radius: 3px;
         box-shadow: 3px;
+        font-size: 12px;
     """,
-    max_width=800,
+    max_width=200,
 )
 
 tibp=folium.FeatureGroup(name = "Alertas de desmatamento na área de amortecimento")
