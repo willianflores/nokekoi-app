@@ -133,21 +133,54 @@ st.markdown('---')
 
 st.markdown("""
 <h3 style="color: white; text-align: center; margin: 20px 0; font-size: 24px;">Parceiros do Projeto</h3>
+
+<style>
+/* Responsividade para os logos */
+@media (max-width: 767px) {
+    /* Mobile - logos médios */
+    .stImage img {
+        max-width: 130px !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    /* Tablet - logos médios */
+    .stImage img {
+        max-width: 150px !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    /* Desktop - logos normais */
+    .stImage img {
+        max-width: 180px !important;
+        height: auto !important;
+        display: block !important;
+        margin: 0 auto !important;
+    }
+}
+</style>
 """, unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns(3, gap="large", vertical_alignment="center")
 
 with col1:
     ufac = Image.open("img/Ufac_logo.png")
-    st.image(ufac)
+    st.image(ufac, width=180)
 
 with col2:
     agpn = Image.open("img/Logo_agpn.png")
-    st.image(agpn)
+    st.image(agpn, width=180)
   
 with col3:
     acre_transmissora = Image.open("img/Logo_Acre_Transmissora.png")
-    st.image(acre_transmissora)
+    st.image(acre_transmissora, width=180)
 
 # Adicionar espaçamento depois dos logos
 st.markdown("---")
