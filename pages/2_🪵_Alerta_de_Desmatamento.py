@@ -18,7 +18,7 @@ from rasterio.features import shapes
 from branca.element import Template, MacroElement
 
 import locale
-
+from mobile_responsive_improvements import apply_mobile_first_improvements
 
 locale.setlocale(locale.LC_ALL, "pt_BR.UTF-8")
 
@@ -30,7 +30,8 @@ st.set_page_config(
   initial_sidebar_state = "collapsed"
 )
 
-
+# Aplicar melhorias Mobile-First
+apply_mobile_first_improvements()
 
 # Meta tags para responsividade
 st.markdown("""
@@ -83,7 +84,24 @@ st.markdown("""
 
 # add_logo('./img/Ufac_logo.png')
 
+## Add logo to sidebar
+def add_logo():
+  st.html("""
+    <style>
+      [alt=Logo] {
+        height: 70%;
+        margin-top: 10%;
+        margin-bottom: 0%;
+        margin-left: 5%;
+        margin-right: 5%;
+      }
+    </style>
+          """
+  )
 
+  st.logo('./img/Ufac_logo.png')
+  
+add_logo()
 
 # Header mobile
 st.markdown("""
@@ -136,22 +154,8 @@ st.markdown("""
 
 ## Sidebar
 with st.sidebar:
-  # Logo no sidebar
-  st.logo('./img/Ufac_logo.png')
-  
-  # CSS para o logo no sidebar
-  st.markdown("""
-  <style>
-  [data-testid="stSidebar"] [alt="Logo"] {
-    height: 60px !important;
-    width: auto !important;
-    margin: 10px auto !important;
-    display: block !important;
-  }
-  </style>
-  """, unsafe_allow_html=True)
-  
-  st.sidebar.header("Alertas de desmatamento")
+  #st.image(logo, width=300)
+  st.sidebar.header("Alertas de desmatameto")
     
   time = st.radio(
     "Selecione o período de análise:",
@@ -519,7 +523,7 @@ st.markdown("""
                 <div class="metric-card deforestation">
                     <div class="metric-icon">🛡️</div>
                     <div class="metric-content">
-                        <div class="metric-title">Alertas de desmatamento na área de amortecimento</div>
+                        <div class="metric-title">Alertas na área de amortecimento</div>
                         <div class="metric-value">""" + str(buffer_radd_n) + """ ha</div>
                         <div class="metric-description">Zona de proteção (buffer 10km)</div>
                     </div>
@@ -712,11 +716,6 @@ st.markdown("""
 st.divider()
 
 if time:
-  # Container do mapa sem título
-  st.markdown("""
-  <div class="map-container">
-  </div>
-  """, unsafe_allow_html=True)
   
   # CSS otimizado para o mapa de desmatamento
   st.markdown("""
@@ -727,7 +726,21 @@ if time:
       padding: 0;
   }
   
-
+  .map-section {
+      margin-bottom: 15px;
+  }
+  
+  .map-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 15px 0;
+      text-align: center;
+      padding: 10px;
+      background: linear-gradient(135deg, #fff0f0 0%, #ffe6e6 100%);
+      border-radius: 10px;
+      border-left: 4px solid #ff6b6b;
+  }
   
   /* Otimização do iframe do mapa */
   .stIframe {
@@ -752,6 +765,11 @@ if time:
   
   /* Mobile - altura otimizada */
   @media (max-width: 767px) {
+      .map-title {
+          font-size: 18px;
+          padding: 8px;
+      }
+      
       .stIframe {
           height: 450px !important; /* Mobile */
           margin: 0 !important;
