@@ -72,6 +72,25 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+## Add logo to sidebar
+def add_logo():
+  st.html("""
+    <style>
+      [alt=Logo] {
+        height: 70%;
+        margin-top: 10%;
+        margin-bottom: 0%;
+        margin-left: 5%;
+        margin-right: 5%;
+      }
+    </style>
+          """
+  )
+
+  st.logo('./img/Ufac_logo.png')
+  
+add_logo()
+
 ## Get the current year
 current_year = datetime.datetime.now().year
 
