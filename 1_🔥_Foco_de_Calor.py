@@ -21,7 +21,7 @@ st.set_page_config(
   page_title = "Focos de calor na TI Campinas/Katukina", 
   page_icon = "./img/labgama-favicon.png",
   layout = "wide",
-  initial_sidebar_state = "collapsed"
+  initial_sidebar_state = "expanded"
 )
 
 # Aplicar melhorias Mobile-First
@@ -44,6 +44,30 @@ st.markdown("""
     <meta name="twitter:description" content="Monitoramento de focos de calor na Terra Indígena Campinas/Katukina e sua área de amortecimento.">
     <meta name="twitter:image" content="./img/labgama-favicon.png">
 </head>
+
+<script>
+// Função para detectar se é mobile e colapsar sidebar
+function adjustSidebarForMobile() {
+    const isMobile = window.innerWidth <= 768;
+    const sidebar = document.querySelector('[data-testid="stSidebar"]');
+    
+    if (sidebar) {
+        if (isMobile) {
+            // Colapsar sidebar no mobile
+            const collapseButton = sidebar.querySelector('button[aria-label="Collapse"]');
+            if (collapseButton) {
+                collapseButton.click();
+            }
+        }
+    }
+}
+
+// Executar quando a página carrega
+document.addEventListener('DOMContentLoaded', adjustSidebarForMobile);
+
+// Executar quando a janela é redimensionada
+window.addEventListener('resize', adjustSidebarForMobile);
+</script>
 """, unsafe_allow_html=True)
 
 
@@ -520,7 +544,7 @@ st.markdown("""
 }
 
 .metric-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
     color: white;
     border-radius: 12px;
     padding: 12px;
