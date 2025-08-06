@@ -712,12 +712,9 @@ st.markdown("""
 st.divider()
 
 if time:
-  # Container do mapa com layout otimizado
+  # Container do mapa sem título
   st.markdown("""
   <div class="map-container">
-      <div class="map-section">
-          <h3 class="map-title">🗺️ Mapa Interativo de Alertas de Desmatamento</h3>
-      </div>
   </div>
   """, unsafe_allow_html=True)
   
@@ -730,21 +727,7 @@ if time:
       padding: 0;
   }
   
-  .map-section {
-      margin-bottom: 15px;
-  }
-  
-  .map-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: #333;
-      margin: 0 0 15px 0;
-      text-align: center;
-      padding: 10px;
-      background: linear-gradient(135deg, #fff0f0 0%, #ffe6e6 100%);
-      border-radius: 10px;
-      border-left: 4px solid #ff6b6b;
-  }
+
   
   /* Otimização do iframe do mapa */
   .stIframe {
@@ -769,11 +752,6 @@ if time:
   
   /* Mobile - altura otimizada */
   @media (max-width: 767px) {
-      .map-title {
-          font-size: 18px;
-          padding: 8px;
-      }
-      
       .stIframe {
           height: 450px !important; /* Mobile */
           margin: 0 !important;
