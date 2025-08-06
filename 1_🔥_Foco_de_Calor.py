@@ -21,7 +21,7 @@ st.set_page_config(
   page_title = "Focos de calor na TI Campinas/Katukina", 
   page_icon = "./img/labgama-favicon.png",
   layout = "wide",
-  initial_sidebar_state = "collapsed"
+  initial_sidebar_state = "expanded"
 )
 
 # Aplicar melhorias Mobile-First
@@ -44,6 +44,28 @@ st.markdown("""
     <meta name="twitter:description" content="Monitoramento de focos de calor na Terra Indígena Campinas/Katukina e sua área de amortecimento.">
     <meta name="twitter:image" content="./img/labgama-favicon.png">
 </head>
+
+<style>
+/* Controle do sidebar responsivo */
+@media (max-width: 767px) {
+    /* Mobile - sidebar colapsado por padrão */
+    [data-testid="stSidebar"] {
+        transform: translateX(-100%) !important;
+    }
+    
+    /* Mostrar sidebar apenas quando ativo */
+    [data-testid="stSidebar"][data-state="expanded"] {
+        transform: translateX(0) !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Desktop - sidebar expandido por padrão */
+    [data-testid="stSidebar"] {
+        transform: translateX(0) !important;
+    }
+}
+</style>
 """, unsafe_allow_html=True)
 
 

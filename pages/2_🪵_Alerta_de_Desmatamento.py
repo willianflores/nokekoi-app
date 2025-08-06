@@ -27,7 +27,7 @@ st.set_page_config(
   page_title = "Alertas de desmatamento na TI Campinas/Katukina", 
   page_icon = "./img/labgama-favicon.png",
   layout = "wide",
-  initial_sidebar_state = "collapsed"
+  initial_sidebar_state = "expanded"
 )
 
 # Aplicar melhorias Mobile-First
@@ -40,6 +40,28 @@ st.markdown("""
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0066cc">
 </head>
+
+<style>
+/* Controle do sidebar responsivo */
+@media (max-width: 767px) {
+    /* Mobile - sidebar colapsado por padrão */
+    [data-testid="stSidebar"] {
+        transform: translateX(-100%) !important;
+    }
+    
+    /* Mostrar sidebar apenas quando ativo */
+    [data-testid="stSidebar"][data-state="expanded"] {
+        transform: translateX(0) !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Desktop - sidebar expandido por padrão */
+    [data-testid="stSidebar"] {
+        transform: translateX(0) !important;
+    }
+}
+</style>
 """, unsafe_allow_html=True)
 
 # @st.cache_data

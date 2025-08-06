@@ -8,7 +8,7 @@ st.set_page_config(
   page_title = "Informações sobre o projeto", 
   page_icon = "./img/labgama-favicon.png",
   layout = "centered",
-  initial_sidebar_state = "collapsed"
+  initial_sidebar_state = "expanded"
 )
 
 # Aplicar melhorias Mobile-First
@@ -21,6 +21,28 @@ st.markdown("""
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0066cc">
 </head>
+
+<style>
+/* Controle do sidebar responsivo */
+@media (max-width: 767px) {
+    /* Mobile - sidebar colapsado por padrão */
+    [data-testid="stSidebar"] {
+        transform: translateX(-100%) !important;
+    }
+    
+    /* Mostrar sidebar apenas quando ativo */
+    [data-testid="stSidebar"][data-state="expanded"] {
+        transform: translateX(0) !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Desktop - sidebar expandido por padrão */
+    [data-testid="stSidebar"] {
+        transform: translateX(0) !important;
+    }
+}
+</style>
 """, unsafe_allow_html=True)
 
 # Header mobile
@@ -101,12 +123,12 @@ with st.sidebar:
   )
 
 st.markdown("""
-<h1 style="color: white; text-align: center; margin: 30px 0; font-size: 28px;">Descrição da Aplicação e dos Dados Disponibilizados</h1>
+<h1 style="color: #999999; text-align: center; margin: 30px 0; font-size: 28px;">Descrição da Aplicação e dos Dados Disponibilizados</h1>
 """, unsafe_allow_html=True)
 
 st.markdown(
   """
-  <div style="color: white; line-height: 1.8; font-size: 18px;">
+  <div style="color: #999999; line-height: 1.8; font-size: 18px;">
     Essa aplicação web foi desenvolvida com o propósito de produzir informações 
     que permitam detectar de forma precoce a alteração da cobertura vegetal na Terra 
     Indígena Campinas/Katukina, ajudando a comunidade indígena a proteger seu patrimônio 
