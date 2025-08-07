@@ -44,9 +44,45 @@ st.markdown("""
 <style>
 /* Controle do sidebar responsivo */
 @media (max-width: 767px) {
-    /* Mobile - permitir que o sidebar funcione normalmente */
+    /* Mobile - sidebar otimizado */
     [data-testid="stSidebar"] {
-        /* Remover transform forçado para permitir funcionamento normal */
+        top: 0 !important;
+        height: 100vh !important;
+        z-index: 999 !important;
+        background-color: #262730 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Corrigir faixa branca no mobile */
+    [data-testid="stSidebar"] > div {
+        background-color: #262730 !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Corrigir todos os elementos internos */
+    [data-testid="stSidebar"] * {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Corrigir espaçamento superior específico */
+    [data-testid="stSidebar"] .css-1d391kg,
+    [data-testid="stSidebar"] .css-1d391kg > div,
+    [data-testid="stSidebar"] header,
+    [data-testid="stSidebar"] header > div {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Forçar cor de fundo em todos os elementos */
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] * {
+        background-color: #262730 !important;
     }
 }
 

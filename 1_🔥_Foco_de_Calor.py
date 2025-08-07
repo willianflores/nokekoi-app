@@ -48,9 +48,45 @@ st.markdown("""
 <style>
 /* Controle do sidebar responsivo */
 @media (max-width: 767px) {
-    /* Mobile - permitir que o sidebar funcione normalmente */
+    /* Mobile - sidebar otimizado */
     [data-testid="stSidebar"] {
-        /* Remover transform forçado para permitir funcionamento normal */
+        top: 0 !important;
+        height: 100vh !important;
+        z-index: 999 !important;
+        background-color: #262730 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Corrigir faixa branca no mobile */
+    [data-testid="stSidebar"] > div {
+        background-color: #262730 !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Corrigir todos os elementos internos */
+    [data-testid="stSidebar"] * {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Corrigir espaçamento superior específico */
+    [data-testid="stSidebar"] .css-1d391kg,
+    [data-testid="stSidebar"] .css-1d391kg > div,
+    [data-testid="stSidebar"] header,
+    [data-testid="stSidebar"] header > div {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+    
+    /* Forçar cor de fundo em todos os elementos */
+    [data-testid="stSidebar"],
+    [data-testid="stSidebar"] * {
+        background-color: #262730 !important;
     }
 }
 
@@ -497,7 +533,7 @@ st.markdown("""
                 <div class="metric-card">
                     <div class="metric-icon">🛡️</div>
                     <div class="metric-content">
-                        <div class="metric-title">Focos na área de amortecimento</div>
+                        <div class="metric-title">Focos de calor na área de amortecimento</div>
                         <div class="metric-value">""" + str(buffer_fire_n) + """</div>
                         <div class="metric-description">Zona de proteção (buffer 10km)</div>
                     </div>
@@ -770,7 +806,7 @@ if time:
   map_data = st_folium(
     m,
     width="100%",
-    height=600,  # Valor base, será sobrescrito pelo CSS
+    height=700,  # Valor base, será sobrescrito pelo CSS
     key="optimized_fire_map"
   )
 
