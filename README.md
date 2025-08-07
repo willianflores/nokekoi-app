@@ -207,12 +207,12 @@ This project is licensed under the [MIT](LICENSE) license.
 For support and questions:
 - Email: willian.flores@ufac.br
 
-### 📧 Contact Information
+## 📧 Contact Information
 - **Email**: willian.flores@ufac.br
 - **Institution**: Universidade Federal do Acre (UFAC)
 - **Department**: Laboratório de Geoprocessamento Aplicado ao Meio Ambiente (LabGAMA)
 
-## 🙏 Acknowledgments
+## 🙏 **Acknowledgments**
 
 - **NASA FIRMS** - Provision of fire hotspot data
 - **Campinas/Katukina Indigenous Territory** - Collaboration and local data
