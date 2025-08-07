@@ -438,9 +438,9 @@ tooltip_b=folium.GeoJsonTooltip(
         border: 2px solid black;
         border-radius: 3px;
         box-shadow: 3px;
-        font-size: 50px;
+        font-size: 14px;
     """,
-    max_width=800,
+    max_width=200,
 )
 
 tooltip_ti=folium.GeoJsonTooltip(
@@ -454,8 +454,9 @@ tooltip_ti=folium.GeoJsonTooltip(
         border: 2px solid black;
         border-radius: 3px;
         box-shadow: 3px;
+        font-size: 14px;
     """,
-    max_width=800,
+    max_width=200,
 )
 
 tibp=folium.FeatureGroup(name = "Alertas de desmatamento na área de amortecimento")
@@ -540,7 +541,7 @@ st.markdown("""
                 <div class="metric-card deforestation">
                     <div class="metric-icon">🛡️</div>
                     <div class="metric-content">
-                        <div class="metric-title">Alertas na área de amortecimento</div>
+                        <div class="metric-title">Alertas de desmatamento na área de amortecimento</div>
                         <div class="metric-value">""" + str(buffer_radd_n) + """ ha</div>
                         <div class="metric-description">Zona de proteção (buffer 10km)</div>
                     </div>
@@ -813,7 +814,7 @@ if time:
   map_data = st_folium(
     m,
     width="100%",
-    height=600,  # Valor base, será sobrescrito pelo CSS
+    height=700,  # Valor base, será sobrescrito pelo CSS
     key="optimized_deforestation_map"
   )
 
