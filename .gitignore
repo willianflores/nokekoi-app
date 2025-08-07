@@ -144,3 +144,18 @@ tmp/
 
 # Arquivos de teste
 test_output/
+
+# Arquivos de tradução e documentação
+translation_template.json
+translation_template_updated.json
+translation_report.md
+texts_extraction_complete.json
+mobile_implementation_guide.md
+MELHORIAS_TRATAMENTO_ERRO.md
+template_traducao_nokekoi.docx
+katukina_translation_template.json
+textos_aplicacao_nokekoi.docx
+
+# Arquivos de extração temporários
+extract_*.py
+convert_*.py
