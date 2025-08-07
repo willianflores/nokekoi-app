@@ -205,8 +205,12 @@ This project is licensed under the [MIT](LICENSE) license.
 ## 📞 Support
 
 For support and questions:
-- Email: support@nokekoi.org
-- Issues: [GitHub Issues](https://github.com/user/nokekoi-app/issues)
+- Email: willian.flores@ufac.br
+
+### 📧 Contact Information
+- **Email**: willian.flores@ufac.br
+- **Institution**: Universidade Federal do Acre (UFAC)
+- **Department**: Laboratório de Geoprocessamento Aplicado ao Meio Ambiente (LabGAMA)
 
 ## 🙏 Acknowledgments
 
