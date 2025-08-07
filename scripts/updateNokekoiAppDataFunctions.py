@@ -70,48 +70,80 @@ def loadTokenFromFile():
             return None
 
 def loadFirmsData(NTR_TOKEN):
-    """Carrega dados da API FIRMS usando o token fornecido."""
+    """Carrega dados da API FIRMS usando o token fornecido para múltiplos satélites."""
     if not NTR_TOKEN or "access_token" not in NTR_TOKEN:
         print("Token inválido. Não foi possível carregar os dados.")
         return
 
     NTR_TOKEN = NTR_TOKEN["access_token"]
     
-    ## Variáveis
-    URL_NOAA_20_VIIRS_C2 = "https://nrt4.modaps.eosdis.nasa.gov/archive/FIRMS/noaa-20-viirs-c2/South_America/"
-    BASE_NOAA_FILE_NAME = "J1_VIIRS_C2_South_America_VJ114IMGTDL_NRT_"
+    ## Variáveis comuns
     FILE_TYPE = ".txt"
     TODAY_YDAY = F"{(datetime.now() - timedelta(days=1)).timetuple().tm_yday:03}".__str__()
     TODAY_YEAR = (datetime.now() - timedelta(days=1)).year.__str__()
+    
+    ## Configuração dos satélites
+    satellites_config = [
+        {
+            "name": "NOAA-20",
+            "url": "https://nrt4.modaps.eosdis.nasa.gov/archive/FIRMS/noaa-20-viirs-c2/South_America/",
+            "base_filename": "J1_VIIRS_C2_South_America_VJ114IMGTDL_NRT_"
+        },
+        {
+            "name": "S-NPP",
+            "url": "https://nrt4.modaps.eosdis.nasa.gov/archive/FIRMS/suomi-npp-viirs-c2/South_America/",
+            "base_filename": "SUOMI_VIIRS_C2_South_America_VNP14IMGTDL_NRT_"
+        },
+        {
+            "name": "NOAA-21",
+            "url": "https://nrt4.modaps.eosdis.nasa.gov/archive/FIRMS/noaa-21-viirs-c2/South_America/",
+            "base_filename": "J2_VIIRS_C2_South_America_VJ214IMGTDL_NRT_"
+        }
+    ]
 
-    NOAA_FILE_NAME = BASE_NOAA_FILE_NAME + TODAY_YEAR + TODAY_YDAY + FILE_TYPE
-    NOAA_URL = URL_NOAA_20_VIIRS_C2 + NOAA_FILE_NAME
-    NOAA_FOLDER = os.path.join(PATHS['suomi_data_path'], NOAA_FILE_NAME)
-
-    ## Carregar dados da API
-    payload_noaa = {}
+    ## Headers para requisições
     headers = {
         "Authorization": "Bearer " + NTR_TOKEN
     }
 
-    response_noaa = requests.request(
-        "GET",
-        NOAA_URL,
-        headers=headers,
-        data=payload_noaa
-    )
+    ## Download para cada satélite
+    for satellite in satellites_config:
+        try:
+            # Construir nome do arquivo e URL
+            filename = satellite["base_filename"] + TODAY_YEAR + TODAY_YDAY + FILE_TYPE
+            url = satellite["url"] + filename
+            local_path = os.path.join(PATHS['suomi_data_path'], filename)
+            
+            print(f"🔍 Baixando dados do satélite {satellite['name']}...")
+            
+            # Fazer requisição
+            response = requests.request(
+                "GET",
+                url,
+                headers=headers,
+                data={}
+            )
 
-    if response_noaa.status_code == 200:
-        # Salvar o conteúdo da resposta em um arquivo local TXT
-        with open(NOAA_FOLDER, "wb") as f:
-            f.write(response_noaa.content)
-        print("TXT file downloaded successfully")
-    else:
-        print("Failed to download TXT file. Status code:", response_noaa.status_code)
-        # Enviar e-mail em caso de falha
-        subject = "Falha no download do arquivo NOAA VIIRS..."
-        body = f"Não foi possível baixar o arquivo NOAA VIIRS. Status code: {response_noaa.status_code}."
-        send_email_notification(subject, body)
+            if response.status_code == 200:
+                # Salvar o conteúdo da resposta em um arquivo local TXT
+                with open(local_path, "wb") as f:
+                    f.write(response.content)
+                print(f"✅ Arquivo {satellite['name']} baixado com sucesso: {filename}")
+            else:
+                print(f"❌ Falha ao baixar arquivo {satellite['name']}. Status code: {response.status_code}")
+                # Enviar e-mail em caso de falha
+                subject = f"Falha no download do arquivo {satellite['name']} VIIRS"
+                body = f"Não foi possível baixar o arquivo {satellite['name']} VIIRS. Status code: {response.status_code}."
+                send_email_notification(subject, body)
+                
+        except Exception as e:
+            print(f"❌ Erro ao baixar dados do {satellite['name']}: {str(e)}")
+            # Enviar e-mail em caso de erro
+            subject = f"Erro no download do arquivo {satellite['name']} VIIRS"
+            body = f"Erro ao baixar o arquivo {satellite['name']} VIIRS: {str(e)}"
+            send_email_notification(subject, body)
+    
+    print("🎉 Download de dados FIRMS concluído para todos os satélites!")
 
         
 # Process FIRMS txt file
