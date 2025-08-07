@@ -25,9 +25,9 @@ st.markdown("""
 <style>
 /* Controle responsivo da sidebar */
 @media (max-width: 767px) {
-    /* Mobile - sidebar colapsado por padrão */
+    /* Mobile - permitir comportamento padrão do Streamlit */
     [data-testid="stSidebar"] {
-        transform: translateX(-100%) !important;
+        /* Comportamento padrão - sem forçar colapso */
     }
     
     /* Corrigir apenas a área do logo quando expandido */
