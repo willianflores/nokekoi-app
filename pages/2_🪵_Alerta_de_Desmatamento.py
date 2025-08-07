@@ -44,31 +44,7 @@ st.markdown("""
 <style>
 /* Controle responsivo da sidebar */
 @media (max-width: 767px) {
-    /* Mobile - permitir comportamento padrão do Streamlit */
-    [data-testid="stSidebar"] {
-        /* Comportamento padrão - sem forçar colapso */
-    }
-    
-    /* Corrigir apenas a área do logo quando expandido */
-    [data-testid="stSidebarNav"] {
-        background-color: #262730 !important;
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-    
-    /* Corrigir header da sidebar */
-    [data-testid="stSidebar"] header {
-        background-color: #262730 !important;
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-    }
-    
-    /* Corrigir container do logo */
-    [data-testid="stSidebar"] [data-testid="stImage"] {
-        background-color: #262730 !important;
-        margin-top: 0 !important;
-        padding-top: 0 !important;
-    }
+    /* Mobile - usar comportamento padrão do Streamlit sem interferências */
 }
 
 @media (min-width: 768px) {
