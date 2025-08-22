@@ -14,6 +14,27 @@ config.ini
 
 # Dados sensíveis e grandes
 # datasets/ - Comentado para permitir dados úteis da aplicação
+
+# Arquivos de dados grandes (apenas fora de datasets/)
+# Esses arquivos são essenciais dentro de datasets/ e devem ser versionados
+!datasets/**/*.csv
+!datasets/**/*.json
+!datasets/**/*.geojson
+!datasets/**/*.kml
+!datasets/**/*.kmz
+!datasets/**/*.shp
+!datasets/**/*.dbf
+!datasets/**/*.prj
+!datasets/**/*.shx
+!datasets/**/*.cpg
+!datasets/**/*.tif
+!datasets/**/*.tiff
+!datasets/**/*.parquet
+!datasets/**/*.feather
+!datasets/**/*.hdf5
+!datasets/**/*.h5
+
+# Bloquear arquivos de dados grandes fora de datasets/
 *.csv
 *.json
 *.geojson
