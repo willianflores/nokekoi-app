@@ -13,7 +13,7 @@ credentials.json
 config.ini
 
 # Dados sensíveis e grandes
-datasets/
+# datasets/ - Comentado para permitir dados úteis da aplicação
 *.csv
 *.json
 *.geojson
@@ -30,6 +30,9 @@ datasets/
 *.feather
 *.hdf5
 *.h5
+
+# Backup específico da pasta datasets
+datasets/suomi-npp-viirs-c2/South_America/Backup/
 
 # Logs
 logs/
