@@ -5,6 +5,17 @@ import sys
 import os
 from datetime import datetime
 
+# Criar diretório de logs automaticamente
+def ensure_logs_directory():
+    """Cria o diretório de logs se não existir"""
+    logs_dir = 'logs'
+    if not os.path.exists(logs_dir):
+        os.makedirs(logs_dir)
+        print(f"📁 Diretório de logs criado: {logs_dir}")
+
+# Garantir que o diretório de logs existe
+ensure_logs_directory()
+
 # Configuração de logging
 logging.basicConfig(
     level=logging.INFO,
